@@ -1,0 +1,4 @@
+2018-05-25 23:21:13.595 [main] INFO  c.a.dataengine.source.OpenDataClientImplTest - Starting OpenDataClientImplTest on P-V-12 with PID 920 (started by Administrator in D:\workspace\dataengine)
+2018-05-25 23:21:13.595 [main] DEBUG c.a.dataengine.source.OpenDataClientImplTest - Running with Spring Boot v2.0.2.RELEASE, Spring v5.0.6.RELEASE
+2018-05-25 23:21:13.595 [main] INFO  c.a.dataengine.source.OpenDataClientImplTest - No active profile set, falling back to default profiles: default
+2018-05-25 23:21:17.588 [main] INFO  c.a.dataengine.source.OpenDataClientImplTest - Started OpenDataClientImplTest in 4.299 seconds (JVM running for 6.564)
