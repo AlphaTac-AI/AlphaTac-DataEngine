@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,6 +24,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
 @PropertySource(value = {"classpath:mongo.properties","classpath:datasource.properties"})
+@EnableScheduling
 public class AppConfig {
     private @Value("${mongo.dbname}") String dbName;
     private @Value("${mongo.host}") String host;
