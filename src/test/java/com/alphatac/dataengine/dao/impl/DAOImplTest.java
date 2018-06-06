@@ -21,6 +21,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.List;
 
 
 @SpringBootTest
@@ -45,17 +46,18 @@ public class DAOImplTest {
         matchInfo.setStart_time(3L);
         matchInfo.setTeam_id(4L);
         matchInfoDAO.insertMatchInfo(matchInfo);
-
+        matchInfoDAO.insertIfNotExist(matchInfo);
         Query query = new Query(Criteria
         .where("match_id").is(1L));
-        MatchInfo m = mongoTemplate.findOne(query,MatchInfo.class,
+        List<MatchInfo> m = mongoTemplate.find(query,MatchInfo.class,
                 "match_info");
-        Assert.assertEquals(m.getLeague_name(),matchInfo.getLeague_name());
+        Assert.assertTrue(m.size()==1);
+        Assert.assertEquals(m.get(0).getLeague_name(),matchInfo.getLeague_name());
 
         mongoTemplate.remove(query,"match_info");
-        m = mongoTemplate.findOne(query,MatchInfo.class,
+        MatchInfo tm = mongoTemplate.findOne(query,MatchInfo.class,
                 "match_info");
-        Assert.assertNull(m);
+        Assert.assertNull(tm);
 
     }
 
@@ -70,18 +72,21 @@ public class DAOImplTest {
         player.setMmr_estimate(mmrEstimate);
         teamInfo.setPlayers(Arrays.asList(new Player[]{player}));
         teamInfoDAO.insertTeamInfo(teamInfo);
-
+        teamInfo.setRating(1000.0);
+        teamInfoDAO.insertOrUpdate(teamInfo);
         Query query = new Query(Criteria
                 .where("team_id").is(1L));
-        TeamInfo res = mongoTemplate.findOne(query,TeamInfo.class,
+        List<TeamInfo> res = mongoTemplate.find(query,TeamInfo.class,
                 "team_info");
-        Assert.assertEquals(res.getPlayers().get(0).getMmr_estimate().getEstimate(),
+        Assert.assertTrue(res.size()==1);
+        Assert.assertEquals(res.get(0).getPlayers().get(0).getMmr_estimate().getEstimate(),
                 teamInfo.getPlayers().get(0).getMmr_estimate().getEstimate());
+        Assert.assertTrue(res.get(0).getRating()==1000.0);
 
         mongoTemplate.remove(query,"team_info");
-        res = mongoTemplate.findOne(query,TeamInfo.class,
+        TeamInfo t = mongoTemplate.findOne(query,TeamInfo.class,
                 "team_info");
-        Assert.assertNull(res);
+        Assert.assertNull(t);
     }
 
     @Test
@@ -95,20 +100,19 @@ public class DAOImplTest {
         matchDetail.setPlayers(Arrays.asList(new MatchPlayer[]{player}));
         matchDetail.setDraft_timings(Arrays.asList(new DraftTiming[]{draftTiming}));
         matchDetailDAO.insertMatchDetail(matchDetail);
-
+        matchDetailDAO.insertIfNotExist(matchDetail);
         Query query = new Query(Criteria
                 .where("match_id").is(1L));
-        MatchDetail res = mongoTemplate.findOne(query,MatchDetail.class,
+        List<MatchDetail> res = mongoTemplate.find(query,MatchDetail.class,
                 "match_detail");
-        Assert.assertEquals(res.getPlayers().get(0).getAccount_id(),
+        Assert.assertEquals(res.get(0).getPlayers().get(0).getAccount_id(),
                 matchDetail.getPlayers().get(0).getAccount_id());
-        Assert.assertEquals(res.getDraft_timings().get(0).getHero_id(),
+        Assert.assertEquals(res.get(0).getDraft_timings().get(0).getHero_id(),
                 matchDetail.getDraft_timings().get(0).getHero_id());
 
         mongoTemplate.remove(query,"match_detail");
-        res = mongoTemplate.findOne(query,MatchDetail.class,
+        MatchDetail t = mongoTemplate.findOne(query,MatchDetail.class,
                 "match_detail");
-        Assert.assertNull(res);
-
+        Assert.assertNull(t);
     }
 }

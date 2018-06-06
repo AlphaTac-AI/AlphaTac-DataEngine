@@ -7,8 +7,9 @@ import com.alphatac.dataengine.entity.player.TeamInfo;
 import java.util.List;
 
 public interface OpenDataService {
-    List<TeamInfo> getSortedTeamInfo();
-    TeamInfo fillPlayerInfo(TeamInfo teamInfos);
-    List<MatchInfo> getSortedMathcInfo(Long teamId);
+    List<Long> getSortedTeamId();
+    TeamInfo fillPlayerInfo(TeamInfo teamInfo);
+    TeamInfo getTeamInfo(Long teamId);
+    List<MatchInfo> getSortedMatchInfo(Long teamId);
     MatchDetail getMatchDetail(Long matchId);
 }

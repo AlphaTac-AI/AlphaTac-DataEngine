@@ -6,4 +6,5 @@ public interface OpenDataClient {
     String getPlayerById(long playerId);
     String getMatchInfoByTeamId(long teamId);
     String getMatchDetailByMatchId(long matchId);
+    String getTeamInfoById(long teamId);
 }

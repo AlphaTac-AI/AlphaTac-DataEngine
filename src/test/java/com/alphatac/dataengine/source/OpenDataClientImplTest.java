@@ -74,4 +74,12 @@ public class OpenDataClientImplTest {
         Assert.assertNotNull(matchDetails);
         System.out.println(matchDetails.getRadiant_win());
     }
+
+    @Test
+    public void getTeamInfoById() throws IOException{
+        String jsonStr = client.getTeamInfoById(15);
+        TeamInfo teamInfo = mapper.readValue(jsonStr,TeamInfo.class);
+        Assert.assertNotNull(teamInfo);
+        System.out.println(teamInfo.getName());
+    }
 }

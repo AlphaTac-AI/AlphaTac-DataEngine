@@ -10,12 +10,16 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.mongodb.core.MongoClientFactoryBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
 @PropertySource(value = {"classpath:mongo.properties","classpath:datasource.properties"})
@@ -83,5 +87,15 @@ public class AppConfig {
         template.setBackOffPolicy(backOffPolicy);
 
         return template;
+    }
+
+
+    @Bean
+    public TaskExecutor taskExecutor(){
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(4);
+        executor.setMaxPoolSize(5);
+        executor.setQueueCapacity(2000);
+        return executor;
     }
 }

@@ -2,6 +2,7 @@ package com.alphatac.dataengine.source;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class OpenDataClientImpl implements OpenDataClient {
     private String URL;
     @Value("${datasource.opendata.api.teams}")
     private String TEAM_API;
+    @Value("${datasource.opendata.api.teamwithid}")
+    private String TEAM_WITH_ID_API;
     @Value("${datasource.opendata.api.teamplayers}")
     private String TEAM_PLAYER_API;
     @Value("${datasource.opendata.api.teammatches}")
@@ -35,7 +38,8 @@ public class OpenDataClientImpl implements OpenDataClient {
     private String PLAYER_API;
     @Value("${datasource.opendata.api.match}")
     private String MATCH_API;
-
+@Autowired
+private MeterRegistry meterRegistry;
 
     @Autowired
     private RetryTemplate retryTemplate;
@@ -47,6 +51,8 @@ public class OpenDataClientImpl implements OpenDataClient {
             ResponseEntity<String> response = retryTemplate.execute(
                     context -> restTemplate.getForEntity(url, String.class)
             );
+            meterRegistry.counter("TEAM_API").increment();
+            meterRegistry.counter("OPENDOTA_API").increment();
             return response.getBody();
         }catch (Exception e){
             if (e instanceof JsonProcessingException) {
@@ -66,6 +72,8 @@ public class OpenDataClientImpl implements OpenDataClient {
             ResponseEntity<String> response = retryTemplate.execute(
                     context -> restTemplate.getForEntity(url, String.class)
             );
+            meterRegistry.counter("TEAM_PLAYER_API").increment();
+            meterRegistry.counter("OPENDOTA_API").increment();
             return response.getBody();
         }catch (Exception e){
             if (e instanceof JsonProcessingException) {
@@ -85,6 +93,8 @@ public class OpenDataClientImpl implements OpenDataClient {
             ResponseEntity<String> response = retryTemplate.execute(
                     context -> restTemplate.getForEntity(url, String.class)
             );
+            meterRegistry.counter("PLAYER_API").increment();
+            meterRegistry.counter("OPENDOTA_API").increment();
             return response.getBody();
         }catch (Exception e){
             if (e instanceof JsonProcessingException) {
@@ -104,6 +114,8 @@ public class OpenDataClientImpl implements OpenDataClient {
             ResponseEntity<String> response = retryTemplate.execute(
                     context -> restTemplate.getForEntity(url, String.class)
             );
+            meterRegistry.counter("TEAM_MATCH_API").increment();
+            meterRegistry.counter("OPENDOTA_API").increment();
             return response.getBody();
         }catch (Exception e){
             if (e instanceof JsonProcessingException) {
@@ -124,6 +136,8 @@ public class OpenDataClientImpl implements OpenDataClient {
             ResponseEntity<String> response = retryTemplate.execute(
                     context -> restTemplate.getForEntity(url, String.class)
             );
+            meterRegistry.counter("MATCH_API").increment();
+            meterRegistry.counter("OPENDOTA_API").increment();
             return response.getBody();
         }catch (Exception e){
             if (e instanceof JsonProcessingException) {
@@ -131,6 +145,27 @@ public class OpenDataClientImpl implements OpenDataClient {
             }else {
                 logger.error("After three times reties, getMatchDetailByMatchId for matchId "+
                         matchId+"from opendata failed./n"+ e.getMessage());
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getTeamInfoById(long teamId) {
+        try {
+            String url = MessageFormat.format(URL+TEAM_WITH_ID_API,teamId);
+            ResponseEntity<String> response = retryTemplate.execute(
+                    context -> restTemplate.getForEntity(url, String.class)
+            );
+            meterRegistry.counter("TEAM_WITH_ID_API").increment();
+            meterRegistry.counter("OPENDOTA_API").increment();
+            return response.getBody();
+        }catch (Exception e){
+            if (e instanceof JsonProcessingException) {
+                logger.error("Jackson transfer map to json string error.");
+            }else {
+                logger.error("After three times reties, getTeamInfoById for teamId "+
+                        teamId+"from opendata failed./n"+ e.getMessage());
             }
         }
         return null;

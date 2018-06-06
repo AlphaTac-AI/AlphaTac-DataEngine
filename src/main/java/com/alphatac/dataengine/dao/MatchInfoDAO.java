@@ -5,5 +5,6 @@ import com.alphatac.dataengine.entity.MatchInfo;
 public interface MatchInfoDAO {
 
     void insertMatchInfo(MatchInfo matchInfo);
+    void insertIfNotExist(MatchInfo matchInfo);
 
 }
