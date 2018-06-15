@@ -97,6 +97,9 @@ public class OpenDataServiceImpl implements OpenDataService {
             String jsonStr = client.getMatchInfoByTeamId(teamId);
             List<MatchInfo> matchInfos = mapper.readValue(jsonStr,
                     new TypeReference<List<MatchInfo>>(){});
+            for (MatchInfo matchInfo :matchInfos){
+                matchInfo.setTeam_id(teamId);
+            }
             if (matchInfos.size()>TEAM_NUM){
                 return new ArrayList<>(matchInfos.subList(0,TEAM_NUM));
             }else {

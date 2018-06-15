@@ -5,4 +5,5 @@ import com.alphatac.dataengine.entity.player.TeamInfo;
 public interface TeamInfoDAO {
     void insertTeamInfo(TeamInfo teamInfo);
     void insertOrUpdate(TeamInfo teamInfo);
+    TeamInfo queryById(Long id);
 }

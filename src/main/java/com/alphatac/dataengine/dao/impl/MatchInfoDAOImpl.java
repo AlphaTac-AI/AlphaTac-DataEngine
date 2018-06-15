@@ -20,7 +20,8 @@ public class MatchInfoDAOImpl implements MatchInfoDAO {
 
     @Override
     public void insertIfNotExist(MatchInfo matchInfo) {
-        Query query = new Query(Criteria.where("match_id").is(matchInfo.getMatch_id()));
+        Query query = new Query(Criteria.where("match_id").is(matchInfo.getMatch_id()).
+        and("team_id").is(matchInfo.getTeam_id()));
         Boolean isFound = mongoTemplate.exists(query,COLLECTION);
         if (!isFound){
             mongoTemplate.save(matchInfo,COLLECTION);

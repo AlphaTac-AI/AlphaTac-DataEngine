@@ -12,4 +12,5 @@ public interface OpenDataService {
     TeamInfo getTeamInfo(Long teamId);
     List<MatchInfo> getSortedMatchInfo(Long teamId);
     MatchDetail getMatchDetail(Long matchId);
+
 }

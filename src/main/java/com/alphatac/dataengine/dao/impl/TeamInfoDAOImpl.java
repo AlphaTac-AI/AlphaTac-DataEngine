@@ -33,4 +33,11 @@ public class TeamInfoDAOImpl implements TeamInfoDAO {
         }
     }
 
+    @Override
+    public TeamInfo queryById(Long id) {
+        Query query = new Query(Criteria
+                .where("team_id").is(id));
+        return mongoTemplate.findOne(query,TeamInfo.class,COLLECTION);
+    }
+
 }

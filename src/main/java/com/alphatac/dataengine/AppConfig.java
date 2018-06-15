@@ -93,11 +93,12 @@ public class AppConfig {
 
 
     @Bean
-    public TaskExecutor taskExecutor(){
+    public ThreadPoolTaskExecutor taskExecutor(){
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(4);
         executor.setMaxPoolSize(5);
         executor.setQueueCapacity(2000);
+        executor.setWaitForTasksToCompleteOnShutdown(false);
         return executor;
     }
 }
