@@ -11,7 +11,7 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
@@ -20,6 +20,8 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
+	maven {url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+	mavenLocal()
 	mavenCentral()
 }
 
@@ -31,6 +33,10 @@ dependencies {
 	compile(group:'org.springframework.retry',
 			name: 'spring-retry',
 			version: '1.0.0.RELEASE')
+	//compile('org.springframework.boot:spring-boot-starter-activemq')
+	compile group: 'org.apache.activemq', name: 'activemq-spring', version: '5.10.0'
+	compile group: 'org.apache.activemq', name: 'activemq-pool', version: '5.10.0'
+	compile group: 'org.springframework', name: 'spring-jms',version:''
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile('org.springframework.boot:spring-boot-starter-aop')
 }
